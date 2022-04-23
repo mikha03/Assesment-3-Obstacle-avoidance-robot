@@ -1,12 +1,4 @@
-from roboticstoolbox import Bicycle, RandomPath, VehicleIcon,RangeBearingSensor,LandmarkMap
-from math import pi , atan2
-import matplotlib.pyplot as plt
-Robot_initial=(input("Please enter the robot's start coordinates as x  y: "))
-Robot_initial=Robot_initial.split()
-Robot_initial_angle=(input("Please enter the robot's initial angle in radians: "))
-Target_Coordinates=(input("Please enter the target coordinates as x  y: "))
-Target_Coordinates=Target_Coordinates.split()
-Num_of_obstacles=(input("Please input number of obstacles: "))
+
 
 #option input
 Target2=(input("Do you want two targets?. please input 'yes' or 'no': "))
