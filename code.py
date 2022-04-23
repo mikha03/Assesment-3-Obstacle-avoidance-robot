@@ -53,11 +53,11 @@ sensor=RangeBearingSensor(robot=veh,map=map,animate=True)
 #Function that detects the obstacle near the car and direction that the car will choose
 def detect_obstacles(readings):
     for i in readings:
-        if i[0]< 1.5 and i[1]<pi/3.8 and i[1]>=0:
+        if i[0]< 1.5 and i[1]<pi/3.6 and i[1]>=0:
             veh.step(2,-pi/2.8) #The robot will avoid the obstacle from the right the direction
             veh._animation.update(veh.x)
             plt.pause(0.005)
-        elif i[0]< 1.5 and i[1]>-pi/3.8 and i[1]<0:
+        elif i[0]< 1.5 and i[1]>-pi/3.6 and i[1]<0:
             veh.step(2,pi/2.8)   #The robot will avoid the obstacle from the left the direction
             veh._animation.update(veh.x)
             plt.pause(0.005)
@@ -76,10 +76,10 @@ def ON():
     
 #Funtion that checks that the car reached the first target
 def reach_condtion():
-    if ((abs(goal[0]-veh.x[0])<0.45) and (abs(goal[1] -veh.x[1])<0.45)):
-        return False
-    else:
+    if ((abs(goal[0]-veh.x[0])<0.45) and (abs(goal[1] -veh.x[1])<0.45)): #distance between the robot and the target
         return True
+    else:
+        return False
 
 #Function that moves the car to target 2
 def ON2():
@@ -94,7 +94,7 @@ def ON2():
 #Funtion that checks that the car reached the second target
 def reach_condtion2():
         if ((abs(goal2[0]-veh.x[0])<0.45) and (abs(goal2[1] -veh.x[1])<0.45)):
-            return False
+            return True
 
 
 run=True
@@ -102,22 +102,22 @@ run_target1=True
 run_target2=True
 while(run):
     if Target2=="yes":
-        if reach_condtion() is True:
+        if reach_condtion() is False:
             while (run_target1):
                 ON()
                 detect_obstacles(sensor.h(veh.x))
-                if reach_condtion() is False:
+                if reach_condtion() is True:
                     run_target1=False
         else:
             while (run_target2):
                 ON2()
                 detect_obstacles(sensor.h(veh.x))
-                if reach_condtion2() is False:
+                if reach_condtion2() is True:
                     run_target2=False
     else:
         ON()
         detect_obstacles(sensor.h(veh.x))
-        if reach_condtion() is False:
+        if reach_condtion() is True:
             run=False
         
 plt.pause(1000)
