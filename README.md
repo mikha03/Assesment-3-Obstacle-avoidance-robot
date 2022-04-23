@@ -161,6 +161,16 @@ while(run):
         
 plt.pause(1000)
 ```
+## Innovations 
 
+we tried to make as many innovaitions as possible to make the code more efficient and practical.
+- The first innvoation that we made is asking the user if they want a second target and then if they type yes, a second target is placed and the robot starts aproaching the first target then the second target. 
+- The second innovation is that if the obstacle is on the right side of the robot's path, it will avoid it by moving to the left side and if the obstacle is on the left side of the robot's pathh it will avoid the obstacle by moving to the right side, we think that this innovation helps the robot to move smoothly and to reach the target without any mistakes.
+
+## Improvements
+
+Although we have made some innovations but there are still some improvements that can be done to the code in the future.
+- One improvement is that the robot can approach the closer target first and then go to the second target because in this code the robot always approaches the main target first and then if the user wants a second target, the robot start approaching it even if the second target is more close than the first target.
+- Another improvement that can be made is having more than two targets that the robot can go to, maybe the user can enter the number of targets that he wants to display.
   
             
