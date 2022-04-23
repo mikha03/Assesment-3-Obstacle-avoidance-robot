@@ -50,20 +50,20 @@ map=LandmarkMap(int(Num_of_obstacles), 10)
 map.plot()
 sensor=RangeBearingSensor(robot=veh,map=map,animate=True)
 
-#Function that detects the obstacle near the car and direction that the car will choose
+#Function that detects the obstacle near the car and direction that the car will choose to avoid it
 def detect_obstacles(readings):
     for i in readings:
         if i[0]< 1.5 and i[1]<pi/3.6 and i[1]>=0:
-            veh.step(2,-pi/2.8) #The robot will avoid the obstacle from the right the direction
+            veh.step(2,-pi/2.8) #The robot will avoid the obstacle by moving to the right
             veh._animation.update(veh.x)
             plt.pause(0.005)
         elif i[0]< 1.5 and i[1]>-pi/3.6 and i[1]<0:
-            veh.step(2,pi/2.8)   #The robot will avoid the obstacle from the left the direction
+            veh.step(2,pi/2.8)   #The robot will avoid the obstacle by moving to the left
             veh._animation.update(veh.x)
             plt.pause(0.005)
 
 
-#Function that moves the car to the target 1 and update angle to goal
+#Function that moves the car to target 1 and update angle to goal
 def ON():
     goal_heading=atan2(
     (goal[1]-veh.x[1]),(goal[0]-veh.x[0])
