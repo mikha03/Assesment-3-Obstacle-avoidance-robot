@@ -24,7 +24,7 @@ This is our README git file for assesment 3. Youssef Elsayed 202000067 - Amr Ham
   3. Obsticales are generated randomly on the map with the exact number that was input by the user
   4. If the user input 'yes' , the second target will be displayed on the map at the input coordinates. If the user input is 'No', no target will be displayed
   5. Then the robot will start to function
-## Funtionality
+## Functionality
 We divided the code into **four parts**:
 - Inputs
 - Designing the robot,map and target
@@ -89,7 +89,7 @@ in the same part of the code we use the function rangebearingsensor to measure t
 
 **Defining different functions**:
 
-Firstly we defined the **obstacle avoidance** `detect_obstacles()` function.This function detects the obstacles in the car’s path and making the car choose the best route for it wheather to the right or to the left according to the angle between the car and the obstacle.If the distance between the car and the obstacle is less than 1.5 and the angle between them is greater than or equal 0 and less than pi/3.6 degrees (*between 0 and pi/3.6*),this means the obstacle is closer to the left side of car, then the robot will avoid the obstacle by moving to the right with a speed of 2 and an angle of pi/2.8 ,else if distance between the car and the obstacle is less than 1.5 and the angle between them is greater than -pi/3.6 degress and less than 0 degrees (*between -pi/3.6 and 0*), this means the obstacle is closer to the right side of the car, then the robot will avoid the obstacle by moving to the left with a speed of 2 and an angle of pi/2.8
+- Firstly we defined the **obstacle avoidance** `detect_obstacles()` function.This function detects the obstacles in the car’s path using the readings from the sensor and making the car choose the best route for it wheather to the right or to the left according to the angle between the car and the obstacle.If the distance between the car and the obstacle is less than 1.5 and the angle between them is greater than or equal 0 and less than pi/3.6 degrees (*between 0 and pi/3.6*),this means the obstacle is closer to the left side of car, then the robot will avoid the obstacle by moving to the right with a speed of 2 and an angle of pi/2.8 ,else if distance between the car and the obstacle is less than 1.5 and the angle between them is greater than -pi/3.6 degress and less than 0 degrees (*between -pi/3.6 and 0*), this means the obstacle is closer to the right side of the car, then the robot will avoid the obstacle by moving to the left with a speed of 2 and an angle of pi/2.8
 ```#Function that detects the obstacle near the car and direction that the car will choose
 def detect_obstacles(readings):
     for i in readings:
@@ -105,7 +105,7 @@ def detect_obstacles(readings):
 ```
 The selected angles are the optimum and are chosen after conducting several tests and trials.
 
-Second function is the `ON()`. This function moves the car to the target and update the angle between the car and the target .we calculate the angle between the target and the car by using `atan` function.We use the coordinates of the car that keeps changing while it's moving and the coordinates of the target. The car moves to the direction of the calculated angle (*angle to target*) with a speed of 2.
+- Second function is the `ON()`. This function moves the car to the target and update the angle between the car and the target .we calculate the angle between the target and the car by using `atan` function.We use the coordinates of the car that keeps changing while it's moving and the coordinates of the target. The car moves to the direction of the calculated angle (*angle to target*) with a speed of 2.
 ```#Function that moves the car to the target 1 and update angle to goal
 def ON():
     goal_heading=atan2(
@@ -117,7 +117,7 @@ def ON():
     plt.pause(0.005)
 ```
 
-Third function is `reach_condition()`. This function checks if the car has reached the target. If the the difference between x coordinates of the car and the target less than the tolerance and the difference between the y coordinates of the car and the target also less than it. The function will return `True` (*which means the car has reached the target*),else the function will return `False` (*which means the car has not reached the target*)
+- Third function is `reach_condtion()`. This function checks if the car has reached the target. If the the difference between x coordinates of the car and the target less than the tolerance and the difference between the y coordinates of the car and the target also less than it. The function will return `True` (*which means the car has reached the target*),else the function will return `False` (*which means the car has not reached the target*)
 ```#Funtion that checks that the car reached the first target
 def reach_condtion():
     if ((abs(goal[0]-veh.x[0])<0.05) or (abs(goal[1] -veh.x[1])<0.05)): #distance between the robot and the target
@@ -125,7 +125,42 @@ def reach_condtion():
     else:
         return False
  ```
+- Then we have `ON2()` and `reach_condtion2()` which are the same as `ON()` and `reach_condtion()` but for target 2
 
+## Make use of the defined functions to perform the task:
+Firstly we run a while loop for the robot to start functioning, then
 
+if there is two targets. we will check if the robot reached target 1 or not. So when reach_condition is False (*as the robot still didn't move*). We open a while loop and the robot starts moving towards the first target using the `ON()` function and avoiding obstacles using `detect_obstacles()` function. It keeps moving untill it reaches the first target, once its reached the while loop for target 1 will break. Now the reach_condition is True. When its True another while loop will open that will make the robot move to target 2 using the functions ON2() and `detect_obstacles()`. Once target 2 is reached the loop breaks and the robot stops.
+
+While if there is only one target, The robot will move to it using `ON()` function and avoid obstacles using `detect_obstacles` function untill the robot reaches the target, then the loop breaks and the robot stops.
+
+** To sum up if there is two targets the robot will reach target 1 and then go to target 2, and if there is only 1 the car will move till it reaches the target and then stops**
+
+```run=True
+run_target1=True
+run_target2=True
+while(run):
+    if Target2=="yes":
+        if reach_condtion() is False:
+            while (run_target1):
+                ON()
+                detect_obstacles(sensor.h(veh.x))
+                if reach_condtion() is True:
+                    run_target1=False
+        else:
+            while (run_target2):
+                ON2()
+                detect_obstacles(sensor.h(veh.x))
+                if reach_condtion2() is True:
+                    run_target2=False
+    else:
+        ON()
+        detect_obstacles(sensor.h(veh.x))
+        if reach_condtion() is True:
+            run=False
+        
+plt.pause(1000)
+```
+we tried to make as many innovaitions as possible to make the code more efficient and practical.The first innvoation that we made is asking the user if they want a second target and then if they type yes, a second target is placed and the robot starts aproaching the first target then the second target. The second innovation is that if the obstacle is on the right side of the robot's path it will move from the left side and if the obstacle is on the left side of the robot's pathh it will continue moving from the right side, we think that this innovation helps the robot to move smoothly and to reach the target without any mistakes.Although we have made some innovations but there are still some improvements that can be done to the code in the future.One improvement is that the robot can approach the closer target first and then go to the second target because in this code the robot always approaches the main target first and then if the user wants a second target then the robot start approaching it even if the second target is more close than the first target 
   
             
