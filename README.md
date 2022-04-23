@@ -173,4 +173,5 @@ Although we have made some innovations but there are still some improvements tha
 - One improvement is that the robot can approach the closer target first and then go to the second target because in this code the robot always approaches the main target first and then if the user wants a second target, the robot start approaching it even if the second target is more close than the first target.
 - Another improvement that can be made is having more than two targets that the robot can go to, maybe the user can enter the number of targets that he wants to display.
   
-            
+  ## Flowchart
+  ![](https://github.com/mikha03/Assesment-3-Obstacle-avoidance-robot/blob/main/images/flowchart.jpeg)
