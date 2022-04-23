@@ -32,15 +32,100 @@ We divided the code into **four parts**:
 - Make use of the defined functions to perform the task
 
 **Inputs**:
+
 The first part of the code is the inputs of the user that are discussed above (*robot's position, Target's position, number of obsticles*) and there is an if condition so that if the user want an extra target, he will input the cooedinates of the extra target 
 
 ```#option input
 Target2=(input("Do you want two targets?. please input 'yes' or 'no': "))
 if Target2 =="yes":
     Target_Coordinates2=(input("Please enter target 2 coordinates as x  y: "))
-    Target_Coordinates2=Target_Coordinates2.split()```
-    
+    Target_Coordinates2=Target_Coordinates2.split()
+```
+        
 We also used the split function `Robot_initial=Robot_initial.split()` , `Target_Coordinates=Target_Coordinates.split()` to be able to use the coordinates seperately later on.
+
+**Designing the robot,map and target**:
+
+Firstly we setup the robot using the functions imported from RoboticsToolbox and downloaded a picture to be the design of the robot and we scaled it using the VehicleIcon function. and we defined the intial position of the robot according to the coordinates and angle input by the user.Then we plotted the robot and updated its position
+```#Robot's place and design
+anim = VehicleIcon('redcar.png', scale = 2)
+veh = Bicycle(
+animation = anim,
+control = RandomPath,
+x0 = (Robot_initial[0],Robot_initial[1],Robot_initial_angle),
+)
+print(veh.x)
+veh.init(plot=True)
+veh._animation.update(veh.x)
+```
+We then plotted the target with the specified coordinates entered by the user and we design the target as we like. We can change Its color,size,and shape.
+```#Target design and coordinates
+goal=[float(Target_Coordinates[0]),float(Target_Coordinates[1])];
+goal_marker_style = {
+'marker': 'X',
+'markersize': 15,
+'color': 'b',
+}
+plt.plot(goal[0],goal[1], **goal_marker_style)
+```
+Then we designed another target with different colour so if the user wants another target, it will be plotted with the chosen coordinates.
+```#Target 2 design and coordinates
+if Target2=="yes":
+    goal2=[float(Target_Coordinates2[0]),float(Target_Coordinates2[1])];
+    goal_marker_style = {
+    'marker': 'X',
+    'markersize': 15,
+    'color': 'r',
+    }
+    plt.plot(goal2[0],goal2[1], **goal_marker_style)
+```
+After that we write the function that displays the map with the specified number of obstacles entered by the user in the input as well as the dimensions of the map. In this task we needed a 20x20 map.
+```#map and number of obsticles
+map=LandmarkMap(int(Num_of_obstacles), 10)
+map.plot()
+```
+in the same part of the code we use the function rangebearingsensor to measure the distance and the angle between each obstacle and the car .
+`sensor=RangeBearingSensor(robot=veh,map=map,animate=True)`
+
+**Defining different functions**:
+
+Firstly we defined the **obstacle avoidance** `detect_obstacles()` function.This function detects the obstacles in the car’s path and making the car choose the best route for it wheather to the right or to the left according to the angle between the car and the obstacle.If the distance between the car and the obstacle is less than 1.5 and the angle between them is greater than or equal 0 and less than pi/3.6 degrees (*between 0 and pi/3.6*),this means the obstacle is closer to the left side of car, then the robot will avoid the obstacle by moving to the right with a speed of 2 and an angle of pi/2.8 ,else if distance between the car and the obstacle is less than 1.5 and the angle between them is greater than -pi/3.6 degress and less than 0 degrees (*between -pi/3.6 and 0*), this means the obstacle is closer to the right side of the car, then the robot will avoid the obstacle by moving to the left with a speed of 2 and an angle of pi/2.8
+```#Function that detects the obstacle near the car and direction that the car will choose
+def detect_obstacles(readings):
+    for i in readings:
+        if i[0]< 1.5 and i[1]<pi/3.6 and i[1]>=0:
+            veh.step(2,-pi/2.8) #The robot will avoid the obstacle from the right the direction
+            veh._animation.update(veh.x)
+            plt.pause(0.005)
+        elif i[0]< 1.5 and i[1]>-pi/3.6 and i[1]<0:
+            veh.step(2,pi/2.8)   #The robot will avoid the obstacle from the left the direction
+            veh._animation.update(veh.x)
+            plt.pause(0.005)
+            
+```
+The selected angles are the optimum and are chosen after conducting several tests and trials.
+
+Second function is the `ON()`. This function moves the car to the target and update the angle between the car and the target .we calculate the angle between the target and the car by using `atan` function.We use the coordinates of the car that keeps changing while it's moving and the coordinates of the target. The car moves to the direction of the calculated angle (*angle to target*) with a speed of 2.
+```#Function that moves the car to the target 1 and update angle to goal
+def ON():
+    goal_heading=atan2(
+    (goal[1]-veh.x[1]),(goal[0]-veh.x[0])
+    )
+    steer = goal_heading-veh.x[2]
+    veh.step(2,steer)
+    veh._animation.update(veh.x)
+    plt.pause(0.005)
+```
+
+Third function is `reach_condition()`. This function checks if the car has reached the target. If the the difference between x coordinates of the car and the target less than the tolerance and the difference between the y coordinates of the car and the target also less than it. The function will return `True` (*which means the car has reached the target*),else the function will return `False` (*which means the car has not reached the target*)
+```#Funtion that checks that the car reached the first target
+def reach_condtion():
+    if ((abs(goal[0]-veh.x[0])<0.05) or (abs(goal[1] -veh.x[1])<0.05)): #distance between the robot and the target
+        return True
+    else:
+        return False
+ ```
+
 
   
             
