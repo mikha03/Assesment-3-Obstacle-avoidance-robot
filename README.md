@@ -175,3 +175,9 @@ Although we have made some innovations but there are still some improvements tha
   
   ## Flowchart
   ![](https://github.com/mikha03/Assesment-3-Obstacle-avoidance-robot/blob/main/images/flowchart.jpeg)
+  
+  ## 1 Target results
+  ![](https://github.com/mikha03/Assesment-3-Obstacle-avoidance-robot/blob/main/images/1.jpeg) ![](https://github.com/mikha03/Assesment-3-Obstacle-avoidance-robot/blob/main/images/2.jpeg)
+
+## 2 Targets results
+![](https://github.com/mikha03/Assesment-3-Obstacle-avoidance-robot/blob/main/images/3.jpeg) ![](https://github.com/mikha03/Assesment-3-Obstacle-avoidance-robot/blob/main/images/4.jpeg)
