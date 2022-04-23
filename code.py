@@ -48,6 +48,7 @@ if Target2=="yes":
 #map and number of obsticles
 map=LandmarkMap(int(Num_of_obstacles), 10)
 map.plot()
+
 sensor=RangeBearingSensor(robot=veh,map=map,animate=True)
 
 #Function that detects the obstacle near the car and direction that the car will choose to avoid it
